@@ -39,3 +39,4 @@ executable draft
                        Run.Run06
                        Run.Run11
                        Run.Run12
+                       Run.Fail01
