@@ -1,35 +1,53 @@
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ImplicitParams #-}
+{-# LANGUAGE ExplicitForAll #-}
 {-# LANGUAGE ConstraintKinds #-}
 
-module Run.Run06 (
-  result3
-) where
+module Run.Run06 where
 
 import Data.Constraint
+import Control.Monad.Reader
 
 import Core.Dict
 import Core.Handler
-import Core.Prototype
 
-import App.Data
-import App.Filter
-import App.Handler
 import App.Constraint
-import App.Prototype
 
--- chainedProto :: forall a. Prototype
---   (FooBarConstraint a, (FooConstraint a, BazConstraint a))
---   (Args, Args2)
---   a
-chainedProto = fooBarProto =&= fooBazProto
+data Env = Env { foo :: String, bar :: String }
 
--- fooBarBazDict3 :: Dict
---   (FooBarConstraint (Args, Args2),
---   (FooConstraint (Args, Args2), BazConstraint (Args, Args2)))
-fooBarBazDict3 = runProto chainedProto
+fooHandler :: forall a m. MonadReader a m => Dict (FooConstraint a) -> m String
+fooHandler Dict = do
+  x <- ask
+  return $ ?getFoo x
 
-args = Args { foo = "foo", bar = "bar" }
-args2 = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
+barHandler :: forall a m. MonadReader a m => Dict (BarConstraint a) -> m String
+barHandler Dict = do
+  x <- ask
+  return $ ?getBar x
 
--- result3 = "((foo: foo) (bar: bar) (baz: baz2))"
-result3 = callHandler fooBarBazHandler (fooBarBazDict3 <-> (cast Dict)) (args, args2)
+composeHandler :: forall a m p q
+  . MonadReader a m
+  => (Dict p -> m String)
+  -> (Dict q -> m String)
+  -> Dict (p, q)
+  -> m String
+composeHandler f g dict = do
+  x1 <- f (dict <-> (cast Dict))
+  x2 <- g (dict <-> (cast Dict))
+  return $
+    "(composed " ++ x1 ++ " " ++ x2 ++ ")"
+
+fooBarHandler :: forall a m. MonadReader a m => Dict (FooBarConstraint a) -> m String
+fooBarHandler = composeHandler fooHandler barHandler
+
+fooBarDict :: Dict (FooBarConstraint Env)
+fooBarDict =
+  let
+    ?getFoo = foo
+    ?getBar = bar
+  in
+    Dict
+
+env = Env { foo = "foo", bar = "bar" }
+
+monadResult = runReader (fooBarHandler fooBarDict) env
