@@ -1,9 +1,7 @@
 {-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE ConstraintKinds #-}
 
-module Run.Run12 (
-  result4
-) where
+module Run.Run12 where
 
 import Data.Constraint
 
@@ -29,5 +27,5 @@ fooBarBazDict4 = runProto chainedProto2
 
 args = Args { foo = "foo", bar = "bar" }
 
--- result4 = "((foo: foo) (bar: bar) (baz: injected-baz))"
-result4 = callHandler fooBarBazHandler (fooBarBazDict4 <-> (cast Dict)) ("injected-baz", args)
+-- protoResult2 = "((foo: foo) (bar: bar) (baz: injected-baz))"
+protoResult2 = callHandler fooBarBazHandler (fooBarBazDict4 <-> (cast Dict)) ("injected-baz", args)
