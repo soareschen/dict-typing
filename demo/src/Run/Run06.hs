@@ -2,7 +2,7 @@
 {-# LANGUAGE ConstraintKinds #-}
 
 module Run.Run06 (
-  result4
+  result3
 ) where
 
 import Data.Constraint
@@ -14,20 +14,22 @@ import Core.Prototype
 import App.Data
 import App.Filter
 import App.Handler
-import App.Prototype
 import App.Constraint
+import App.Prototype
 
--- chainedProto2 :: forall a. Prototype
---   (BazConstraint a, FooBarConstraint a)
---   (String, Args)
+-- chainedProto :: forall a. Prototype
+--   (FooBarConstraint a, (FooConstraint a, BazConstraint a))
+--   (Args, Args2)
 --   a
-chainedProto2 = chainProto bazProto fooBarProto
+chainedProto = fooBarProto =&= fooBazProto
 
--- fooBarBazDict4 :: Dict
---   (BazConstraint (String, Args), FooBarConstraint (String, Args))
-fooBarBazDict4 = runProto chainedProto2
+-- fooBarBazDict3 :: Dict
+--   (FooBarConstraint (Args, Args2),
+--   (FooConstraint (Args, Args2), BazConstraint (Args, Args2)))
+fooBarBazDict3 = runProto chainedProto
 
 args = Args { foo = "foo", bar = "bar" }
+args2 = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 
--- result4 = "((foo: foo) (bar: bar) (baz: injected-baz))"
-result4 = callHandler fooBarBazHandler (fooBarBazDict4 <-> (cast Dict)) ("injected-baz", args)
+-- result3 = "((foo: foo) (bar: bar) (baz: baz2))"
+result3 = callHandler fooBarBazHandler (fooBarBazDict3 <-> (cast Dict)) (args, args2)

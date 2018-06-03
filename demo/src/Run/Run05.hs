@@ -1,35 +1,29 @@
 {-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE TemplateHaskell #-}
 
-module Run.Run05 (
-  result3
-) where
+module Run.Run05 where
 
+import Control.Lens
 import Data.Constraint
 
 import Core.Dict
 import Core.Handler
-import Core.Prototype
 
-import App.Data
-import App.Filter
-import App.Handler
-import App.Constraint
-import App.Prototype
+import App.Lens
 
--- chainedProto :: forall a. Prototype
---   (FooBarConstraint a, (FooConstraint a, BazConstraint a))
---   (Args, Args2)
---   a
-chainedProto = fooBarProto =&= fooBazProto
+data Args = Args { _foo :: String, _bar :: String }
+makeLenses ''Args
 
--- fooBarBazDict3 :: Dict
---   (FooBarConstraint (Args, Args2),
---   (FooConstraint (Args, Args2), BazConstraint (Args, Args2)))
-fooBarBazDict3 = runProto chainedProto
+fooBarLensDict :: Dict (FooBarLensConstraint Args)
+fooBarLensDict =
+  let
+    ?fooLens = Lenses foo
+    ?barLens = Lenses bar
+  in
+    Dict
 
-args = Args { foo = "foo", bar = "bar" }
-args2 = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
+args = Args { _foo = "foo", _bar = "bar" }
 
--- result3 = "((foo: foo) (bar: bar) (baz: baz2))"
-result3 = callHandler fooBarBazHandler (fooBarBazDict3 <-> (cast Dict)) (args, args2)
+-- "((view-foo foo) (view-bar bar))"
+lensResult = callHandler fooBarLensHandler fooBarLensDict args

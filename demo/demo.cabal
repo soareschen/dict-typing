@@ -17,7 +17,7 @@ cabal-version:       >=1.10
 
 executable draft
   main-is:             Main.hs
-  build-depends:       constraints, base >=4.10 && <4.11
+  build-depends:       constraints, lens, base >=4.10 && <4.11
   hs-source-dirs:      src
   default-language:    Haskell2010
   other-modules:       Run.All
@@ -25,6 +25,7 @@ executable draft
                        App.Constraint
                        App.Handler
                        App.Filter
+                       App.Lens
                        App.Prototype
                        Core.Dict
                        Core.Handler
@@ -36,3 +37,4 @@ executable draft
                        Run.Run04
                        Run.Run05
                        Run.Run06
+                       Run.Run07
