@@ -3,6 +3,9 @@
 
 ## Overview
 
+This repository contains the demo snippets for the Dict typing presentation
+at Haskell SG meetup June 2018. Slides is available at https://slides.com/soareschen/dict-typing.
+
 ## Related Topics
 
   - Row Polymorphism
