@@ -2,9 +2,7 @@
 {-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE ConstraintKinds #-}
 
-module Run.Run02 (
-  fooBarResult
-) where
+module Run.Run02 where
 
 import Data.Constraint
 
@@ -31,7 +29,7 @@ bazDict = let ?getBaz = baz in Dict
 -- Dict (FooConstraint Args2, BarConstraint Args2, BazConstraint Args2)
 -- (note the parenthesis)
 fooBarBazDict :: Dict (FooBarBazConstraint Args2)
-fooBarBazDict = fooDict &-& barDict &-& bazDict <-> (cast Dict)
+fooBarBazDict = fooDict &-& barDict &-& bazDict <-> Dict
 
 args = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 
@@ -44,10 +42,12 @@ args = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 -- inner handlers. Note that we have to cast the dicts before
 -- passing to the inner handlers.
 composeHandler :: forall p q r a. Handler p a -> Handler q a -> Handler (p, q) a
-composeHandler f g = Handler $ \dict x ->
-  let Dict = dict in
-    "(composed: " ++ (callHandler f (dict <-> (cast Dict)) x) ++
-    " " ++ (callHandler g (dict <-> (cast Dict)) x) ++ ")"
+composeHandler f g = Handler $ \Dict ->
+  let
+    f' = callHandler f Dict
+    g' = callHandler g Dict
+  in \x ->
+    "(composed " ++ (f' x) ++ " " ++ (g' x) ++ ")"
 
 -- fooBarHandler is a composition of fooHandler and barHandler
 -- fooBarHandler :: Handler (FooConstraint a, BarConstraint a) a
@@ -55,5 +55,5 @@ fooBarHandler = composeHandler fooHandler barHandler
 
 -- We can also pass args2 to any of the handlers as they also have both fields
 
--- fooBarResult = "(composed: (foo: foo2) (bar: bar2))"
-fooBarResult = callHandler fooBarHandler (fooBarBazDict <-> (cast Dict)) args
+-- fooBarResult = "(composed (foo: foo2) (bar: bar2))"
+composedResult = callHandler fooBarHandler (fooBarBazDict <-> Dict) args

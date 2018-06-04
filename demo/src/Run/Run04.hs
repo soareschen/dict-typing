@@ -32,7 +32,7 @@ setBazDict :: Dict (SetBazConstraint Args2 Args2)
 setBazDict = let ?setBaz = setBaz in Dict
 
 fooBarBazDict :: Dict (FooBarBazConstraint Args2)
-fooBarBazDict = fooDict &-& barDict &-& bazDict <-> (cast Dict)
+fooBarBazDict = fooDict &-& barDict &-& bazDict <-> Dict
 
 setFooBarBazDict :: Dict (SetFooBarBazConstraint Args2)
 setFooBarBazDict = fooBarBazDict &-& setBazDict
@@ -61,4 +61,4 @@ filteredHandler2 = applyFilter' bazFilter fooBarBazHandler
 args = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 
 -- filteredResult2 = "((foo: foo2) (bar: bar2) (baz: baz with bar2))"
-filteredResult2 = callHandler filteredHandler2 (setFooBarBazDict <-> (cast Dict)) args
+filteredResult2 = callHandler filteredHandler2 (setFooBarBazDict <-> Dict) args

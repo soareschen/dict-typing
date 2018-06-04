@@ -2,7 +2,7 @@ module App.Data where
 
 -- If we want to pass for example an instance of Dict (Foo a, Bar a)
 -- to a function that accepts a Dict (Bar a), we can cast it as follow:
--- barDict = (fooBarDict <-> (cast Dict))
+-- barDict = (fooBarDict <-> Dict)
 --
 -- The casting operation is a bit verbose, but Haskell does most of the
 -- work for us recognizing that it is always safe to cast different

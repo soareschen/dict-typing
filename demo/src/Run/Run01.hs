@@ -32,7 +32,7 @@ args = Args { foo = "foo", bar = "bar" }
 -- casting if we are passing the combined dict.
 
 -- fooResult = "(foo: foo)"
-fooResult = callHandler fooHandler (fooBarDict <-> (cast Dict)) args
+fooResult = callHandler fooHandler (fooBarDict <-> Dict) args
 
 -- barResult = "(bar: bar)"
-barResult = callHandler barHandler (fooBarDict <-> (cast Dict)) args
+barResult = callHandler barHandler (fooBarDict <-> Dict) args

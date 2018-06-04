@@ -32,8 +32,8 @@ composeHandler :: forall a m p q
   -> Dict (p, q)
   -> m String
 composeHandler f g dict = do
-  x1 <- f (dict <-> (cast Dict))
-  x2 <- g (dict <-> (cast Dict))
+  x1 <- f (dict <-> Dict)
+  x2 <- g (dict <-> Dict)
   return $
     "(composed " ++ x1 ++ " " ++ x2 ++ ")"
 

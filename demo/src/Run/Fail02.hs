@@ -65,11 +65,11 @@ args = Args { foo = "foo" }
 -- However we'd fail to cast fooDict3 back to fooDict1, as
 -- fooDict2 appears on the right side and locks in the
 -- type signature for ?getFoo.
--- foo1Result = callHandler foo1Handler (fooDict3 <-> (cast Dict)) args
+-- foo1Result = callHandler foo1Handler (fooDict3 <-> Dict) args
 
 -- We can cast fooDict3 back to fooDict2 to be called with foo2Handler.
 -- This is because fooDict2 has the right most definition of ?getFoo. 
-foo2Result = callHandler foo2Handler (fooDict3 <-> (cast Dict)) args
+foo2Result = callHandler foo2Handler (fooDict3 <-> Dict) args
 
 -- We can still call foo1Handler with fooDict1, showing that
 -- ?getFoo can still have multiple definitions as long as

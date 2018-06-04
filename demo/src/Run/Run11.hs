@@ -30,4 +30,4 @@ args = Args { foo = "foo", bar = "bar" }
 args2 = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 
 -- protoResult1 = "((foo: foo) (bar: bar) (baz: baz2))"
-protoResult1 = callHandler fooBarBazHandler (fooBarBazDict3 <-> (cast Dict)) (args, args2)
+protoResult1 = callHandler fooBarBazHandler (fooBarBazDict3 <-> Dict) (args, args2)

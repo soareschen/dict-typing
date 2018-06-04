@@ -25,6 +25,6 @@ callHandler (Handler h) dict = h dict
 
 -- Similar to casting dicts, we can cast handlers into
 -- different permutations of its constraints.
-castHandler :: forall p q a. Handler q a -> Cast p q -> Handler p a
+castHandler :: forall p q a. Handler q a -> (p => Dict q) -> Handler p a
 castHandler h casted = Handler $ \dict ->
   callHandler h (castDict dict casted)

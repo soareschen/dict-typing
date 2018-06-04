@@ -13,7 +13,8 @@
 ## References
 
   - [Overcoming the Record Problem](https://www.parsonsmatt.org/overcoming-records/) - Matt Parsons
-  - [Haskell record variant comparison](https://docs.google.com/spreadsheets/d/14MJEjiMVulTVzSU4Bg4cCYZVfkbgANCRlrOiRneNRv8/edit)
+  - [Haskell record variant comparison](https://www.reddit.com/r/haskell/comments/8g8ojm/lets_create_a_comparison_table_of_all_the_haskell/)
   - [The ReaderT Design Pattern](https://www.fpcomplete.com/blog/2017/06/readert-design-pattern)
   - [The Has Constraints](https://github.com/input-output-hk/cardano-sl/blob/develop/docs/monads.md#the-has-constraints)
   - [Type Classes vs. the World](https://www.youtube.com/watch?v=hIZxTQP1ifo) - Edward Kmett
+  - [Magic classes for overloaded record fields](https://ghc.haskell.org/trac/ghc/wiki/Records/OverloadedRecordFields/MagicClasses)

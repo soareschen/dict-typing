@@ -47,7 +47,7 @@ defaultDict =
     Dict
 
 combinedDict :: Dict (FooBarBazConstraint Args)
-combinedDict = fooBarDict &-& (defaultDict @Args) <-> (cast Dict)
+combinedDict = fooBarDict &-& (defaultDict @Args) <-> Dict
 
 args = Args { foo = "foo", bar = "bar" }
 

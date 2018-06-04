@@ -28,4 +28,4 @@ fooBarBazDict4 = runProto chainedProto2
 args = Args { foo = "foo", bar = "bar" }
 
 -- protoResult2 = "((foo: foo) (bar: bar) (baz: injected-baz))"
-protoResult2 = callHandler fooBarBazHandler (fooBarBazDict4 <-> (cast Dict)) ("injected-baz", args)
+protoResult2 = callHandler fooBarBazHandler (fooBarBazDict4 <-> Dict) ("injected-baz", args)

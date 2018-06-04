@@ -19,4 +19,4 @@ applyFilter (Filter f) inDict h = f inDict h
 -- the same argument type.
 applyFilter' :: forall p q a. Filter p a q a -> Handler q a -> Handler (p, q) a
 applyFilter' (Filter f) h = Handler $ \dict ->
-  callHandler (f (dict <-> (cast Dict)) h) (dict <-> (cast Dict))
+  callHandler (f (dict <-> Dict) h) (dict <-> Dict)

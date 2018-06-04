@@ -32,7 +32,7 @@ bazDict :: Dict (BazConstraint Args2)
 bazDict = let ?getBaz = baz in Dict
 
 fooBarBazDict :: Dict (FooBarBazConstraint Args2)
-fooBarBazDict = fooDict2 &-& barDict2 &-& bazDict <-> (cast Dict)
+fooBarBazDict = fooDict2 &-& barDict2 &-& bazDict <-> Dict
 
 -- If we setBaz on Args, it becomes an Args2.
 setBaz :: Args -> String -> Args2
@@ -64,4 +64,4 @@ filteredHandler = makeFilteredHandler fooBarBazDict
 args = Args { foo = "foo", bar = "bar" }
 
 -- filteredResult = "((foo: foo) (bar: bar) (baz: baz with bar))"
-filteredResult = callHandler filteredHandler (setFooBarDict <-> (cast Dict)) args
+filteredResult = callHandler filteredHandler (setFooBarDict <-> Dict) args
