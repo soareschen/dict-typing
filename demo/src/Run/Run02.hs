@@ -13,25 +13,25 @@ import App.Data
 import App.Handler
 import App.Constraint
 
-fooDict :: Dict (FooConstraint Args2)
+fooDict :: Dict (FooConstraint Env2)
 fooDict = let ?getFoo = foo2 in Dict
 
-barDict :: Dict (BarConstraint Args2)
+barDict :: Dict (BarConstraint Env2)
 barDict = let ?getBar = bar2 in Dict
 
-bazDict :: Dict (BazConstraint Args2)
+bazDict :: Dict (BazConstraint Env2)
 bazDict = let ?getBaz = baz in Dict
 
 -- To merge 3 dicts, we have to use cast to "flatten"
 -- the structure of the dict, because otherwise we get
--- Dict (FooConstraint Args2, (BarConstraint Args2, BazConstraint Args2))
+-- Dict (FooConstraint Env2, (BarConstraint Env2, BazConstraint Env2))
 -- which is not the same as
--- Dict (FooConstraint Args2, BarConstraint Args2, BazConstraint Args2)
+-- Dict (FooConstraint Env2, BarConstraint Env2, BazConstraint Env2)
 -- (note the parenthesis)
-fooBarBazDict :: Dict (FooBarBazConstraint Args2)
+fooBarBazDict :: Dict (FooBarBazConstraint Env2)
 fooBarBazDict = fooDict &-& barDict &-& bazDict <-> Dict
 
-args = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
+env = Env2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 
 -- With the handler abstraction, we can easily compose them
 -- without too much trouble fighting with Haskell's automatic
@@ -53,7 +53,7 @@ composeHandler f g = Handler $ \Dict ->
 -- fooBarHandler :: Handler (FooConstraint a, BarConstraint a) a
 fooBarHandler = composeHandler fooHandler barHandler
 
--- We can also pass args2 to any of the handlers as they also have both fields
+-- We can also pass env2 to any of the handlers as they also have both fields
 
 -- fooBarResult = "(composed (foo: foo2) (bar: bar2))"
-composedResult = callHandler fooBarHandler (fooBarBazDict <-> Dict) args
+composedResult = callHandler fooBarHandler (fooBarBazDict <-> Dict) env

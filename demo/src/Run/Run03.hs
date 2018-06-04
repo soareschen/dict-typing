@@ -16,32 +16,32 @@ import App.Filter
 import App.Handler
 import App.Constraint
 
-fooDict :: Dict (FooConstraint Args)
+fooDict :: Dict (FooConstraint Env)
 fooDict = let ?getFoo = foo in Dict
 
-barDict :: Dict (BarConstraint Args)
+barDict :: Dict (BarConstraint Env)
 barDict = let ?getBar = bar in Dict
 
-fooDict2 :: Dict (FooConstraint Args2)
+fooDict2 :: Dict (FooConstraint Env2)
 fooDict2 = let ?getFoo = foo2 in Dict
 
-barDict2 :: Dict (BarConstraint Args2)
+barDict2 :: Dict (BarConstraint Env2)
 barDict2 = let ?getBar = bar2 in Dict
 
-bazDict :: Dict (BazConstraint Args2)
+bazDict :: Dict (BazConstraint Env2)
 bazDict = let ?getBaz = baz in Dict
 
-fooBarBazDict :: Dict (FooBarBazConstraint Args2)
+fooBarBazDict :: Dict (FooBarBazConstraint Env2)
 fooBarBazDict = fooDict2 &-& barDict2 &-& bazDict <-> Dict
 
--- If we setBaz on Args, it becomes an Args2.
-setBaz :: Args -> String -> Args2
-setBaz (Args foo bar) value = Args2 { foo2 = foo, bar2 = bar, baz = value}
+-- If we setBaz on Env, it becomes an Env2.
+setBaz :: Env -> String -> Env2
+setBaz (Env foo bar) value = Env2 { foo2 = foo, bar2 = bar, baz = value}
 
-setBazDict :: Dict (SetBazConstraint Args Args2)
+setBazDict :: Dict (SetBazConstraint Env Env2)
 setBazDict = let ?setBaz = setBaz in Dict
 
-setFooBarDict :: Dict (SetFooBarConstraint Args Args2)
+setFooBarDict :: Dict (SetFooBarConstraint Env Env2)
 setFooBarDict = (fooDict &-& barDict) &-& setBazDict
 
 -- We can partially apply bazFilter with fooBarBazHandler
@@ -53,15 +53,15 @@ setFooBarDict = (fooDict &-& barDict) &-& setBazDict
 makeFilteredHandler dict = applyFilter bazFilter dict fooBarBazHandler
 
 -- Specialize the filtered handler to require the result of set baz
--- to be an Args2.
+-- to be an Env2.
 
 -- filteredHandler :: forall a.
---   Handler (SetBazConstraint a Args2, BarConstraint a) a
+--   Handler (SetBazConstraint a Env2, BarConstraint a) a
 filteredHandler = makeFilteredHandler fooBarBazDict
 
--- We can call filteredHandler with both args and args2.
+-- We can call filteredHandler with both env and env2.
 
-args = Args { foo = "foo", bar = "bar" }
+env = Env { foo = "foo", bar = "bar" }
 
 -- filteredResult = "((foo: foo) (bar: bar) (baz: baz with bar))"
-filteredResult = callHandler filteredHandler (setFooBarDict <-> Dict) args
+filteredResult = callHandler filteredHandler (setFooBarDict <-> Dict) env

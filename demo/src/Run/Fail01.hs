@@ -21,7 +21,7 @@ import App.Constraint
 
 type BazBarFooConstraint a = (BazConstraint a, BarConstraint a, FooConstraint a)
 
-fooBarDict :: Dict (FooBarConstraint Args)
+fooBarDict :: Dict (FooBarConstraint Env)
 fooBarDict =
   let
     ?getFoo = foo
@@ -41,16 +41,16 @@ defaultDict :: forall a. Dict (BazBarFooConstraint a)
 defaultDict =
   let
     ?getFoo = \_ -> "default-foo"
-    ?getBar = \_ -> "default-foo"
+    ?getBar = \_ -> "default-bar"
     ?getBaz = \_ -> "default-baz"
   in
     Dict
 
-combinedDict :: Dict (FooBarBazConstraint Args)
-combinedDict = fooBarDict &-& (defaultDict @Args) <-> Dict
+combinedDict :: Dict (FooBarBazConstraint Env)
+combinedDict = fooBarDict &-& (defaultDict @Env) <-> Dict
 
-args = Args { foo = "foo", bar = "bar" }
+env = Env { foo = "foo", bar = "bar" }
 
 -- Correct: "((foo: foo) (bar: bar) (baz: default-baz))"
 -- Wrong: "((foo: default-foo) (bar: default-foo) (baz: default-baz))"
-defaultResult = callHandler fooBarBazHandler combinedDict args
+defaultResult = callHandler fooBarBazHandler combinedDict env

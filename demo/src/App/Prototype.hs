@@ -9,7 +9,7 @@ import App.Data
 import App.Constraint
 import Core.Prototype
 
-fooBarProto :: forall a. Prototype (FooBarConstraint a) Args a
+fooBarProto :: forall a. Prototype (FooBarConstraint a) Env a
 fooBarProto = Prototype $ \getArg ->
   let
     ?getFoo = foo . getArg
@@ -17,7 +17,7 @@ fooBarProto = Prototype $ \getArg ->
   in
     Dict
 
-fooBazProto :: forall a. Prototype (FooConstraint a, BazConstraint a) Args2 a
+fooBazProto :: forall a. Prototype (FooConstraint a, BazConstraint a) Env2 a
 fooBazProto = Prototype $ \getArg ->
   let
     ?getFoo = foo2 . getArg

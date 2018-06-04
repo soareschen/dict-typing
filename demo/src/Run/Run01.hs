@@ -15,24 +15,24 @@ import App.Data
 import App.Handler
 import App.Constraint
 
-fooDict :: Dict (FooConstraint Args)
+fooDict :: Dict (FooConstraint Env)
 fooDict = let ?getFoo = foo in Dict
 
-barDict :: Dict (BarConstraint Args)
+barDict :: Dict (BarConstraint Env)
 barDict = let ?getBar = bar in Dict
 
 -- Using the merge operator, we can merge multiple dicts
 -- into a larger dict containing all implicit parameters.
-fooBarDict :: Dict (FooBarConstraint Args)
+fooBarDict :: Dict (FooBarConstraint Env)
 fooBarDict = fooDict &-& barDict
 
-args = Args { foo = "foo", bar = "bar" }
+env = Env { foo = "foo", bar = "bar" }
 
--- We can pass args to fooHandler and barHandler, with some verbose
+-- We can pass env to fooHandler and barHandler, with some verbose
 -- casting if we are passing the combined dict.
 
 -- fooResult = "(foo: foo)"
-fooResult = callHandler fooHandler (fooBarDict <-> Dict) args
+fooResult = callHandler fooHandler (fooBarDict <-> Dict) env
 
 -- barResult = "(bar: bar)"
-barResult = callHandler barHandler (fooBarDict <-> Dict) args
+barResult = callHandler barHandler (fooBarDict <-> Dict) env

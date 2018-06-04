@@ -17,15 +17,15 @@ import App.Constraint
 
 -- chainedProto2 :: forall a. Prototype
 --   (BazConstraint a, FooBarConstraint a)
---   (String, Args)
+--   (String, Env)
 --   a
 chainedProto2 = chainProto bazProto fooBarProto
 
 -- fooBarBazDict4 :: Dict
---   (BazConstraint (String, Args), FooBarConstraint (String, Args))
+--   (BazConstraint (String, Env), FooBarConstraint (String, Env))
 fooBarBazDict4 = runProto chainedProto2
 
-args = Args { foo = "foo", bar = "bar" }
+env = Env { foo = "foo", bar = "bar" }
 
 -- protoResult2 = "((foo: foo) (bar: bar) (baz: injected-baz))"
-protoResult2 = callHandler fooBarBazHandler (fooBarBazDict4 <-> Dict) ("injected-baz", args)
+protoResult2 = callHandler fooBarBazHandler (fooBarBazDict4 <-> Dict) ("injected-baz", env)

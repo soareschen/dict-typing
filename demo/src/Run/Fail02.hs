@@ -30,16 +30,16 @@ type Foo1Constraint a = (?getFoo :: a -> String)
 -- name but with different type signature.
 type Foo2Constraint a = (?getFoo :: a -> Int -> Int)
 
-data Args = Args { foo :: String }
+data Env = Env { foo :: String }
 
-fooDict1 :: Dict (Foo1Constraint Args)
+fooDict1 :: Dict (Foo1Constraint Env)
 fooDict1 =
   let
     ?getFoo = foo
   in
     Dict
 
-fooDict2 :: Dict (Foo2Constraint Args)
+fooDict2 :: Dict (Foo2Constraint Env)
 fooDict2 =
   let
     ?getFoo = \_ x -> x + 1
@@ -49,7 +49,7 @@ fooDict2 =
 -- When merging fooDict1 and fooDict2, we get a dictionary
 -- containing both ?getFoo definitions, seemingly violating
 -- the uniqueness constraint of record fields.
-fooDict3 :: Dict (Foo1Constraint Args, Foo2Constraint Args)
+fooDict3 :: Dict (Foo1Constraint Env, Foo2Constraint Env)
 fooDict3 = fooDict1 &-& fooDict2
 
 foo1Handler :: forall a. Handler (Foo1Constraint a) a
@@ -60,18 +60,18 @@ foo2Handler :: forall a. Handler (Foo2Constraint a) a
 foo2Handler = makeHandler $ \x ->
   "(foo2 " ++ (show (?getFoo x 8)) ++ ")"
 
-args = Args { foo = "foo" }
+env = Env { foo = "foo" }
 
 -- However we'd fail to cast fooDict3 back to fooDict1, as
 -- fooDict2 appears on the right side and locks in the
 -- type signature for ?getFoo.
--- foo1Result = callHandler foo1Handler (fooDict3 <-> Dict) args
+-- foo1Result = callHandler foo1Handler (fooDict3 <-> Dict) env
 
 -- We can cast fooDict3 back to fooDict2 to be called with foo2Handler.
 -- This is because fooDict2 has the right most definition of ?getFoo. 
-foo2Result = callHandler foo2Handler (fooDict3 <-> Dict) args
+foo2Result = callHandler foo2Handler (fooDict3 <-> Dict) env
 
 -- We can still call foo1Handler with fooDict1, showing that
 -- ?getFoo can still have multiple definitions as long as
 -- not appearing locally at the same time.
-foo1Result2 = callHandler foo1Handler fooDict1 args
+foo1Result2 = callHandler foo1Handler fooDict1 env

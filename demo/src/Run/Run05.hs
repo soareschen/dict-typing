@@ -12,10 +12,10 @@ import Core.Handler
 
 import App.Lens
 
-data Args = Args { _foo :: String, _bar :: String }
-makeLenses ''Args
+data Env = Env { _foo :: String, _bar :: String }
+makeLenses ''Env
 
-fooBarLensDict :: Dict (FooBarLensConstraint Args)
+fooBarLensDict :: Dict (FooBarLensConstraint Env)
 fooBarLensDict =
   let
     ?fooLens = Lenses foo
@@ -23,7 +23,7 @@ fooBarLensDict =
   in
     Dict
 
-args = Args { _foo = "foo", _bar = "bar" }
+env = Env { _foo = "foo", _bar = "bar" }
 
 -- "((view-foo foo) (view-bar bar))"
-lensResult = callHandler fooBarLensHandler fooBarLensDict args
+lensResult = callHandler fooBarLensHandler fooBarLensDict env

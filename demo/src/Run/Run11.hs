@@ -17,17 +17,17 @@ import App.Prototype
 
 -- chainedProto :: forall a. Prototype
 --   (FooBarConstraint a, (FooConstraint a, BazConstraint a))
---   (Args, Args2)
+--   (Env, Env2)
 --   a
 chainedProto = fooBarProto =&= fooBazProto
 
 -- fooBarBazDict3 :: Dict
---   (FooBarConstraint (Args, Args2),
---   (FooConstraint (Args, Args2), BazConstraint (Args, Args2)))
+--   (FooBarConstraint (Env, Env2),
+--   (FooConstraint (Env, Env2), BazConstraint (Env, Env2)))
 fooBarBazDict3 = runProto chainedProto
 
-args = Args { foo = "foo", bar = "bar" }
-args2 = Args2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
+env = Env { foo = "foo", bar = "bar" }
+env2 = Env2 { foo2 = "foo2", bar2 = "bar2", baz = "baz2" }
 
 -- protoResult1 = "((foo: foo) (bar: bar) (baz: baz2))"
-protoResult1 = callHandler fooBarBazHandler (fooBarBazDict3 <-> Dict) (args, args2)
+protoResult1 = callHandler fooBarBazHandler (fooBarBazDict3 <-> Dict) (env, env2)

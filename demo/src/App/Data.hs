@@ -9,9 +9,9 @@ module App.Data where
 -- subsets and permutations of the same set of constraints.
 
 -- Here we have two example types that we are going to use for duck typing.
--- Both Args and Args2 have the foo and bar fields. Note that we are
--- naming the fields in Args as foo2 and bar2 to avoid ambiguous field
+-- Both Env and Env2 have the foo and bar fields. Note that we are
+-- naming the fields in Env as foo2 and bar2 to avoid ambiguous field
 -- accessor errors.
-data Args = Args { foo :: String, bar :: String }
+data Env = Env { foo :: String, bar :: String }
 
-data Args2 = Args2 { foo2 :: String, bar2 :: String, baz :: String }
+data Env2 = Env2 { foo2 :: String, bar2 :: String, baz :: String }
