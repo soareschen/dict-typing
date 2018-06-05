@@ -69,8 +69,11 @@ dict2 = let ?a = "a2"; ?b = "b2"; ?c = "c2" in Dict
 
 dict3 = dict1 &-& dict2
 
+showParam :: (?a :: String, ?b :: String, ?c :: String) => String
+showParam = ?a ++ " " ++ ?b ++ " " ++ ?c
+
 showDict :: Dict (?a :: String, ?b :: String, ?c :: String) -> String
-showDict Dict = ?a ++ " " ++ ?b ++ " " ++ ?c
+showDict Dict = showParam
 
 -- castResult1 = "a1 b1 c1"
 castResult1 = showDict $ ((dict3 <-> Dict)
@@ -96,9 +99,21 @@ castResult4 = showDict $ ((dict3 <-> Dict)
 
 -- Note that when using implicit parameters as regular constraints,
 -- the bug doesn't show up and we always get values of dict1.
-showDict2 :: (?c :: String, ?b :: String, ?a :: String) => String
-showDict2 = ?a ++ " " ++ ?b ++ " " ++ ?c
+
+showParam2 :: (?c :: String, ?b :: String, ?a :: String) => String
+showParam2 = ?a ++ " " ++ ?b ++ " " ++ ?c
 
 -- castResult5 = "a1 b1 c1"
 castResult5 = case dict3 of
-  Dict -> showDict2
+  Dict -> showParam2
+
+-- Expanding the automatic entailment, we can see that dict4 also have
+-- the bug with castResult6 showing the wrong result
+
+dict4 :: ((?a :: String, ?b :: String, ?c :: String),
+          (?c :: String, ?b :: String, ?a :: String))
+         => Dict (?c :: String, ?b :: String, ?a :: String)
+dict4 = Dict
+
+-- castResult6 = "a2 b2 c2"
+castResult6 = showDict $ (dict3 <-> dict4) <-> Dict
