@@ -35,9 +35,9 @@ fooBarDict =
 -- pick the particular constraint subset regardless of its order.
 
 -- Uncomment this type signature to produce the correct result.
-defaultDict :: forall a. Dict (BazBarFooConstraint a)
+-- defaultDict :: forall a. Dict (BazBarFooConstraint a)
 
--- defaultDict :: forall a. Dict (FooBarBazConstraint a)
+defaultDict :: forall a. Dict (FooBarBazConstraint a)
 defaultDict =
   let
     ?getFoo = \_ -> "default-foo"

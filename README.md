@@ -1,10 +1,13 @@
-# Dict Typing - Solving the Haskell record problem with
-# Data.Constraint.Dict and implicit parameters
+# Dict Typing
+
+### Solving the Haskell record problem with Data.Constraint.Dict and implicit parameters
 
 ## Overview
 
-This repository contains the demo snippets for the Dict typing presentation
-at Haskell SG meetup June 2018. Slides is available at https://slides.com/soareschen/dict-typing.
+This repository contains the demo snippets for my Dict typing presentations.
+
+  - [Haskell SG meetup, June 2018](https://slides.com/soareschen/dict-typing-haskellsg)
+  - [OPLSS Participant Talk, July 2018](https://slides.com/soareschen/dict-typing-oplss)
 
 ## Related Topics
 
